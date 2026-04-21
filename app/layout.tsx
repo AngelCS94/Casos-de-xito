@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "Generador de casos de éxito",
-  description: "MVP para generar una slide corporativa de caso de éxito en formato PPTX.",
+  title: "Generador de Caso de Exito | MVP",
+  description: "Generador de una slide corporativa de caso de exito en formato PPTX",
 };
 
 export default function RootLayout({
@@ -12,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="h-full antialiased">
+    <html lang="es" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

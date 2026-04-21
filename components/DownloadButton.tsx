@@ -1,20 +1,20 @@
 "use client";
 
-type DownloadButtonProps = {
-  disabled: boolean;
-  loading: boolean;
-  onDownload: () => void;
-};
+interface DownloadButtonProps {
+  onClick: () => void;
+  disabled?: boolean;
+  isLoading?: boolean;
+}
 
-export function DownloadButton({ disabled, loading, onDownload }: DownloadButtonProps) {
+export function DownloadButton({ onClick, disabled, isLoading }: DownloadButtonProps) {
   return (
     <button
       type="button"
-      onClick={onDownload}
-      disabled={disabled || loading}
-      className="rounded-lg border border-blue-700 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-60"
+      onClick={onClick}
+      disabled={disabled || isLoading}
+      className="rounded-lg border border-sky-700 bg-sky-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-300"
     >
-      {loading ? "Preparando descarga..." : "Descargar PPTX"}
+      {isLoading ? "Generando PPTX..." : "Descargar PPTX"}
     </button>
   );
 }

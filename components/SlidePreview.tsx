@@ -1,69 +1,113 @@
-import type { SlideSchema } from "@/lib/schema";
+"use client";
 
-type SlidePreviewProps = {
-  slide: SlideSchema | null;
-};
+import { useEffect, useState } from "react";
+import type { SlideContent } from "@/types/slide";
 
-function renderBullets(items: string[]) {
+interface SlidePreviewProps {
+  data: SlideContent;
+  caseImages?: File[];
+}
+
+function BulletList({ items }: { items: string[] }) {
   return (
-    <ul className="list-disc pl-4 space-y-1">
+    <ul className="space-y-1 text-sm text-slate-700">
       {items.map((item, index) => (
-        <li key={index}>{item}</li>
+        <li key={`${item}-${index}`} className="flex gap-2">
+          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-sky-600" />
+          <span>{item}</span>
+        </li>
       ))}
     </ul>
   );
 }
 
-export function SlidePreview({ slide }: SlidePreviewProps) {
-  if (!slide) {
-    return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-sm text-slate-500">
-        Aquí verás la vista previa estructurada antes de descargar el PPTX.
-      </div>
-    );
-  }
+export function SlidePreview({ data, caseImages = [] }: SlidePreviewProps) {
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    const nextUrls = caseImages.map((file) => URL.createObjectURL(file));
+    setImageUrls(nextUrls);
+
+    return () => {
+      nextUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [caseImages]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-      <div className="grid grid-cols-5 min-h-[520px]">
-        <section className="col-span-3 p-6 text-slate-800">
-          <p className="text-xs font-semibold text-slate-500">{slide.header}</p>
-          <h2 className="mt-2 text-2xl font-bold leading-tight text-slate-900">{slide.title}</h2>
+    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h2 className="text-base font-semibold text-slate-900">Vista previa estructurada</h2>
 
-          <div className="mt-5 space-y-4 text-sm">
+      <div className="mt-4 overflow-hidden rounded-lg border border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-5">
+          <div className="space-y-4 bg-white p-5 md:col-span-3">
+            <p className="text-xs uppercase tracking-wide text-slate-500">{data.header}</p>
+            <h3 className="text-xl font-bold leading-tight text-slate-900">{data.title}</h3>
+
             <div>
-              <h3 className="font-semibold text-blue-700">{slide.challenge.title}</h3>
-              <p className="mt-1 leading-relaxed">{slide.challenge.body}</p>
+              <h4 className="text-sm font-bold text-sky-700">{data.challenge.title}</h4>
+              <p className="mt-1 text-sm text-slate-700">{data.challenge.body}</p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-blue-700">{slide.approach.title}</h3>
-              <p className="mt-1">{slide.approach.intro}</p>
-              <div className="mt-2">{renderBullets(slide.approach.bullets)}</div>
+              <h4 className="text-sm font-bold text-sky-700">{data.approach.title}</h4>
+              <p className="mt-1 text-sm text-slate-700">{data.approach.intro}</p>
+              <div className="mt-2">
+                <BulletList items={data.approach.bullets} />
+              </div>
             </div>
 
             <div>
-              <h3 className="font-semibold text-blue-700">{slide.impact.title}</h3>
-              <div className={`mt-2 grid gap-4 ${slide.impact.bullets_right.length > 0 ? "grid-cols-2" : "grid-cols-1"}`}>
-                <div>{renderBullets(slide.impact.bullets_left)}</div>
-                {slide.impact.bullets_right.length > 0 && <div>{renderBullets(slide.impact.bullets_right)}</div>}
+              <h4 className="text-sm font-bold text-sky-700">{data.impact.title}</h4>
+              <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <BulletList items={data.impact.bullets_left} />
+                {data.impact.bullets_right.length > 0 ? (
+                  <BulletList items={data.impact.bullets_right} />
+                ) : (
+                  <p className="text-xs italic text-slate-400">Sin segunda columna</p>
+                )}
               </div>
             </div>
           </div>
-        </section>
 
-        <aside className="col-span-2 bg-blue-50 p-5">
-          <h3 className="text-sm font-semibold text-blue-800">Panel visual (collage)</h3>
-          <p className="mt-1 text-xs text-slate-600">{slide.visual_panel.visual_summary}</p>
-          <div className="mt-4 space-y-3">
-            {slide.visual_panel.asset_suggestions.map((suggestion, index) => (
-              <div key={index} className="rounded-lg border border-blue-200 bg-blue-100 p-3 text-xs text-blue-900">
-                {suggestion}
+          <div className="space-y-2 bg-sky-100 p-4 md:col-span-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-sky-900">Panel visual</p>
+            <p className="text-xs text-sky-900">{data.visual_panel.visual_summary}</p>
+            {imageUrls.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2">
+                {imageUrls.map((url, index) => (
+                  <div key={url} className={index === 0 && imageUrls.length === 3 ? "col-span-2" : ""}>
+                    <img
+                      src={url}
+                      alt={`Imagen del caso ${index + 1}`}
+                      className="h-32 w-full rounded-md border border-sky-300 object-cover"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  {data.visual_panel.asset_suggestions.map((item, index) => (
+                    <div
+                      key={`${item}-${index}`}
+                      className="rounded-md border border-sky-300 bg-white p-2 text-[11px] font-medium text-sky-900"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-md border border-dashed border-sky-300 bg-sky-50 p-2 text-xs text-sky-800">
+                  Collage placeholder para capturas o imagenes.
+                </div>
+              </>
+            )}
           </div>
-        </aside>
+        </div>
       </div>
-    </div>
+
+      {data.logos.length > 0 && (
+        <p className="mt-3 text-xs text-slate-500">Logos sugeridos: {data.logos.join(" | ")}</p>
+      )}
+    </section>
   );
 }

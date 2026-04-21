@@ -1,26 +1,16 @@
-export type SlideContent = {
-  header: string;
-  title: string;
-  challenge: {
-    title: "El Reto";
-    body: string;
-  };
-  approach: {
-    title: "¿Qué hemos hecho?";
-    intro: string;
-    bullets: string[];
-  };
-  impact: {
-    title: "Impacto";
-    bullets_left: string[];
-    bullets_right: string[];
-  };
-  visual_panel: {
-    style: "collage";
-    visual_summary: string;
-    asset_suggestions: string[];
-  };
-  logos: string[];
-};
+import type { SlideSchema } from "@/lib/schema";
 
-export type GenerateMode = "preview" | "download";
+export type SlideContent = SlideSchema;
+
+export type GenerateOutputMode = "json" | "pptx";
+
+export interface ExampleMeta {
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+}
+
+export interface EmbeddedImage {
+  fileName: string;
+  dataUrl: string;
+}

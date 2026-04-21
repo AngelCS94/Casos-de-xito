@@ -1,61 +1,60 @@
 "use client";
 
-type PromptFormProps = {
+interface PromptFormProps {
   prompt: string;
   language: string;
-  loading: boolean;
+  disabled?: boolean;
   onPromptChange: (value: string) => void;
   onLanguageChange: (value: string) => void;
-  onGenerate: () => void;
-};
+  onSubmit: () => void;
+}
 
 export function PromptForm({
   prompt,
   language,
-  loading,
+  disabled,
   onPromptChange,
   onLanguageChange,
-  onGenerate,
+  onSubmit,
 }: PromptFormProps) {
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="prompt" className="text-sm font-semibold text-slate-700">
-          Briefing del nuevo caso
-        </label>
-        <textarea
-          id="prompt"
-          rows={5}
-          value={prompt}
-          onChange={(event) => onPromptChange(event.target.value)}
-          placeholder="Describe sector, reto, trabajo realizado e impacto esperado"
-          className="w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800 focus:border-blue-500 focus:outline-none"
-        />
-      </div>
+    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h2 className="text-base font-semibold text-slate-900">Briefing del nuevo caso</h2>
+      <p className="mt-1 text-sm text-slate-600">
+        Describe en pocas lineas el cliente, objetivo, solucion e impacto esperado.
+      </p>
 
-      <div className="space-y-2">
-        <label htmlFor="language" className="text-sm font-semibold text-slate-700">
+      <textarea
+        className="mt-4 min-h-36 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-sky-500 focus:outline-none"
+        value={prompt}
+        placeholder="Ejemplo: Caso para retailer nacional. Necesitamos contar como optimizamos la estrategia de CRM y activaciones omnicanal para aumentar relevancia y acelerar conversion comercial."
+        onChange={(event) => onPromptChange(event.target.value)}
+      />
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <label className="text-sm text-slate-700" htmlFor="language-select">
           Idioma
         </label>
         <select
-          id="language"
+          id="language-select"
+          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
           value={language}
           onChange={(event) => onLanguageChange(event.target.value)}
-          className="w-full rounded-lg border border-slate-300 bg-white p-2 text-sm text-slate-800"
         >
-          <option value="es">Español</option>
-          <option value="en">English</option>
+          <option value="ES">ES</option>
+          <option value="EN">EN</option>
+          <option value="PT">PT</option>
         </select>
       </div>
 
       <button
         type="button"
-        onClick={onGenerate}
-        disabled={loading}
-        className="w-full rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={disabled}
+        onClick={onSubmit}
+        className="mt-5 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300"
       >
-        {loading ? "Generando..." : "Generar caso de éxito"}
+        Generar caso de exito
       </button>
-    </div>
+    </section>
   );
 }
