@@ -20,8 +20,8 @@ export function ExampleUploader({ files, onChange }: ExampleUploaderProps) {
         className="block w-full rounded-lg border border-slate-300 bg-white p-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-white"
       />
       <ul className="text-xs text-slate-600">
-        {files.map((file) => (
-          <li key={`${file.name}-${file.size}`}>{file.name}</li>
+        {files.map((file, index) => (
+          <li key={index}>{file.name}</li>
         ))}
       </ul>
     </div>

@@ -8,7 +8,7 @@ function renderBullets(items: string[]) {
   return (
     <ul className="list-disc pl-4 space-y-1">
       {items.map((item, index) => (
-        <li key={`${item}-${index}`}>{item}</li>
+        <li key={index}>{item}</li>
       ))}
     </ul>
   );
@@ -57,7 +57,7 @@ export function SlidePreview({ slide }: SlidePreviewProps) {
           <p className="mt-1 text-xs text-slate-600">{slide.visual_panel.visual_summary}</p>
           <div className="mt-4 space-y-3">
             {slide.visual_panel.asset_suggestions.map((suggestion, index) => (
-              <div key={`${suggestion}-${index}`} className="rounded-lg border border-blue-200 bg-blue-100 p-3 text-xs text-blue-900">
+              <div key={index} className="rounded-lg border border-blue-200 bg-blue-100 p-3 text-xs text-blue-900">
                 {suggestion}
               </div>
             ))}
