@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import type { SlideContent } from "@/types/slide";
 
 interface SlidePreviewProps {
@@ -22,16 +22,15 @@ function BulletList({ items }: { items: string[] }) {
 }
 
 export function SlidePreview({ data, caseImages = [] }: SlidePreviewProps) {
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const imageUrls = useMemo(() => {
+    return caseImages.map((file) => URL.createObjectURL(file));
+  }, [caseImages]);
 
   useEffect(() => {
-    const nextUrls = caseImages.map((file) => URL.createObjectURL(file));
-    setImageUrls(nextUrls);
-
     return () => {
-      nextUrls.forEach((url) => URL.revokeObjectURL(url));
+      imageUrls.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [caseImages]);
+  }, [imageUrls]);
 
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">

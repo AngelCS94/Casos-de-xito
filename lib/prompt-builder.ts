@@ -38,7 +38,7 @@ Briefing del usuario:
 ${input.userPrompt.trim()}
 """
 
-Resumen de ejemplos aportados (3 a 5):
+Resumen de ejemplos aportados (1 a 5):
 ${examplesSummary || "No se recibieron metadatos utiles."}
 
 Requisitos de contenido:

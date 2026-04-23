@@ -157,9 +157,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Solo se permiten hasta 3 imagenes del caso" }, { status: 400 });
     }
 
-    if (!slideDataRaw && (files.length < 3 || files.length > 5)) {
+    if (!slideDataRaw && (files.length < 1 || files.length > 5)) {
       return NextResponse.json(
-        { error: "Debes subir entre 3 y 5 ejemplos" },
+        { error: "Debes subir entre 1 y 5 ejemplos" },
         { status: 400 }
       );
     }

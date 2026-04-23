@@ -20,7 +20,7 @@ export default function Home() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const canGenerate = useMemo(() => {
-    return files.length >= 3 && files.length <= 5 && prompt.trim().length > 10;
+    return files.length >= 1 && files.length <= 5 && prompt.trim().length > 10;
   }, [files.length, prompt]);
 
   const handleGenerate = async () => {
@@ -29,7 +29,7 @@ export default function Home() {
     setSlideData(null);
 
     if (!canGenerate) {
-      setError("Necesitas entre 3 y 5 ejemplos y un briefing minimo de 10 caracteres.");
+      setError("Necesitas entre 1 y 5 ejemplos y un briefing minimo de 10 caracteres.");
       return;
     }
 
